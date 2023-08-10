@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+
+
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+
+
+
+
+
+	<div class="container py-4">
+		<div class="card bg-ligth">
+			<h1><div class="alert alert-info" role="alert"   id="tipo_factura" >FACTURA DE VENTA
+
+</div></h1>
+			<div class="card-body">
+
+				<form th:action="@{/factura/guardarfactura}" th:object="${factura}" 
+					method="post" >
+
+					<div class="form-group row">
+						<label for="buscar_producto " class="col-sm-2 col-form-label"
+							th:text="'Buscar productos :'"></label>
+						<div class="col-sm-6">
+							<input type="text" name="buscar_producto" id="buscar_producto" 
+								class="form-control" />
+						</div>
+
+					</div>
+
+					<div class="form-group row">
+						<label for="observacion_factura" class="col-sm-2 col-form-label"
+							th:text="'Observación :'"></label>
+						<div class="col-sm-6">
+							<input type="text" th:field="*{observacion}"
+								name="observacion_factura" id="observacion_factura"
+								class="form-control" />
+						</div>
+
+					</div>
+
+
+
+					<div class="form-check form-switch">
+						<input class="form-check-input" type="checkbox" role="switch"  onchange="lineasHelper.crearBorrador()"
+							id="flexSwitchCheckDefault" th:field="*{borrador}"
+							 /> <label
+							class="form-check-label" for="flexSwitchCheckDefault">Borrador</label>
+					</div>
+
+
+					<table
+						th:replace="factura/plantilla-lineasfactura :: lineasFactura"></table>
+
+
+					<table id="cargarItemProductos"
+						class="table table-sm table-striped table-hover">
+						<thead>
+							<tr>
+								<th width="25%">Nombre</th>
+								<th width="20%">Presentacion</th>
+								<th width="10%">Estado</th>
+								<th width="15%">Precio Unidad</th>
+								<th width="5%">Cantidad</th>
+								<th width="20%"style="background:#EDBB99;">Total Producto</th>
+								<th width="5%">Eliminar</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+
+
+<div class= "form-group row"  >
+					<h2 align="right" >
+						Total $  <span class="badge badge-pill badge-secondary" id="gran_total" style="background:#2C3E50;" >0</span>
+					</h2>
+</div>
+
+					<div align="right">
+						<div class="col-sm-9 py-3">
+							<h1><input type="submit" th:value="GUARDAR" class="btn btn-success" /></h1>
+						</div>
+					</div>
+					
+				</form>
+			</div>
+
+		</div>
+	</div>
+
+
+
+	<footer th:replace="layout/layout :: footer"></footer>
+	<script th:replace="factura/js/autocomplete-productos :: javascript"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"> 
+ <script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/Chart.min.js"></script>
+  
+  <head th:replace="layout/layout :: head"></head>
+    
+<header th:replace="layout/layout :: header"></header>
+<body>
+<div class="container-sm" >
+  <div class="form-group-sm">
+    <h1>Ventas Mes</h1>
+    <canvas id="grafica" width="45"></canvas>
+    <script src="../js/script.js"></script>
+    </div>
+</div>
+    <footer th:replace="layout/layout :: footer"></footer>
+</body>
+
+</html>

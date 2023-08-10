@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+
+
+
+
+
+	<div class="container py-4">
+	<div class="card bg-light">
+			<div class="card-header">
+			<h4 th:text="${titulo}"></h4></div>
+			<div class="card-body">
+
+		<div class="col-sm-6 py-2"><a th:href="@{facturar}" class="btn btn-primary">Nueva
+			Factura</a></div>
+				<div>
+		<table class="table table-bordered table-striped-sm">
+			<thead class="thead-dark">
+				<tr class="tr-dark">
+					<th hidden="true">Id</th>
+				
+					<th width="10%">Consecutivo</th>
+					<th width="20%">Fecha Elaboracion</th>
+					<th width="10%">Estado</th>
+					<th width="30%">Observacion</th>
+					<th width="10%">Total Factura</th>
+					<th width="5%">Eliminar</th>
+					
+
+					
+				</tr>
+			</thead>
+			<tbody > 
+
+				<tr th:each="factura : ${facturasRecientes}" th:style="|${factura.estado!='RECAUDADO' ? 'background-color:LightSalmon;' : 'background-color:#82E0AA ;'}|" >
+
+					<td hidden="true" th:text=${factura.idFactura} id="fila1"></td>
+					<td th:text=${factura.consecutivo}></td>
+					<td th:text=${factura.fecha_elaboracion}></td>
+					
+					<td th:text=${factura.estado}></td>
+					<td th:text=${factura.observacion}></td>
+					<td th:text="${'$'+ factura.totalFactura}" bgcolor="grey"></td>
+					
+					<td><a th:href="@{eliminar/}+${factura.idFactura}"
+						   th:text="Eliminar" class="btn btn-xs btn-danger" 
+
+
+						   th:onclick="return confirm('¿Realmente quisiera eliminar ésta factura?')" ></a></td>
+
+
+
+					
+					
+
+					<!--onclick="return confirm('¿Realmente quieres eliminar éste producto?')"-->
+
+
+				</tr>
+			</tbody>
+		</table>
+				</div>
+		<nav th:replace="paginator-nav :: paginator"></nav>
+		</div>
+		</div>
+
+	</div>
+	
+	<!--<nav th:replace="paginator-nav :: paginator"></nav>  -->
+	<footer th:replace="layout/layout :: footer"></footer>
+	
+
+</body>
+</html>

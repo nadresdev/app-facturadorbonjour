@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th:="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body>
+
+	<header th:replace="layout/layout :: header"></header>
+
+
+
+
+
+
+	<div class="container py-4">
+	<div class="card bg-light">
+			<div class="card-header">
+			<h4 th:text="${titulo}"></h4></div>
+			<div class="card-body">
+
+		<div class="col-sm-6 py-2"><a th:href="@{formproducto}" class="btn btn-primary">Agregar
+			Producto</a></div>
+				<div>
+		<table class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr class="tr-dark">
+					<th hidden="true">Id</th>
+					<th>Nombre</th>
+					<th>Marca</th>
+					<th>Presentación</th>
+					<th>Precio Inventario</th>
+					<th>Precio Venta</th>
+					<th>Porcentaje Beneficio</th>
+					<th>Categoria</th>
+					<th>Stock</th>
+					<th>Editar</th>
+					<th>Eliminar</th>
+					
+
+					<th hidden="true">Id_categoria</th>
+				</tr>
+			</thead>
+			<tbody > 
+
+				<tr th:each="producto : ${productosrecientes}" th:style="|${producto.getProductoDisponibilidad.stockProducto < 5 ? 'background-color:LightSalmon;' : 'background-color:#82E0AA ;'}|" >
+
+					<td hidden="true" th:text=${producto.idProducto} id="fila1"></td>
+					<td th:text=${producto.nombre}></td>
+					<td th:text=${producto.marca}></td>
+					<td th:text=${producto.presentacion}></td>
+					<td th:text="${'$'+ producto.precioInventario}"></td>
+					<td th:text="${'$'+ producto.precioBeneficio}" bgcolor="grey"></td>
+					<td th:text="${producto.beneficioProducto + '%'}"></td>
+					<td th:text="${producto.getCategoria.nombre}"></td>
+					<td th:text="${producto.getProductoDisponibilidad.stockProducto}"></td>
+					<td><a th:href="@{formproducto/} + ${producto.idProducto}"
+						th:text="Editar" class="btn btn-xs btn-primary"></a></td>
+					<td><a th:href="@{eliminar/}+${producto.idProducto}"
+						   th:text="Eliminar" class="btn btn-xs btn-danger" 
+
+
+						   th:onclick="return confirm('¿Realmente quisiera eliminar éste producto?')" ></a></td>
+
+
+
+					<td th:text="${producto.getCategoria.id_categoria}" hidden="true"></td>
+					
+
+					<!--onclick="return confirm('¿Realmente quieres eliminar éste producto?')"-->
+
+
+				</tr>
+			</tbody>
+		</table>
+				</div>
+		<nav th:replace="paginator-nav :: paginator"></nav>
+		</div>
+		</div>
+
+	</div>
+	
+	<!--<nav th:replace="paginator-nav :: paginator"></nav>  -->
+	<footer th:replace="layout/layout :: footer"></footer>
+
+</body>
+</html>

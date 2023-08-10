@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/Chart.min.js"></script>
+</head>
+<body>
+	<canvas id="graficaVentasEgresosGanancias" width="400" height="300"></canvas>
+</body>
+	<script>
+		var miCanvas = document.getElementById("graficaVentasEgresosGanancias").getContext("2d");
+
+		var chart = new Chart("miCanvas", {
+
+			type : "bar",
+			data :{
+				labels : [ "Enero", "febero", "marzo", "abril", "mayo",
+						"junio", "julio", "agosto", "septiembre", "octubre",
+						"noviembre", "diciembre" ],
+				datasets : [ {
+
+					label : "estadisticas papeleria",
+					backgroundColor : "rgb(135, 248, 253)",
+					data : [ 12, 13, 13, 13, 14, 14, 14, 16, 17, 20, 11, 12 ]
+				}
+
+				]
+			}
+		})
+	</script>
+
+</html>

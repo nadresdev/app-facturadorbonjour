@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+ <head th:replace="layout/layout :: head"></head>
+
+<body>
+<header th:replace="layout/layout :: header"></header>
+
+<div class="container py-4">
+    <h3 th:text="${titulo}"></h3>
+    <form th:action="@{/formularios/guardarproducto}" th:object="${producto}" method="post">
+
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Nombre</label>
+            <div class="col-sm-6">
+                <input type="text" name="nombre" class="form-control" th:field="*{nombre}">
+
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Marca</label>
+            <div class="col-sm-6">
+                <input type="text" name="marca" id="marca" class="form-control" th:field="*{marca}">
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Presentación</label>
+            <div class="col-sm-3">
+                <input type="text" name="presentacion" id="presentacion" class="form-control"
+                       th:field="*{presentacion}">
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Precio en inventario</label>
+            <div class="col-sm-2">
+                <input type="text" name="precioInventario" id="precioInventario" class="form-control"
+                       th:field="*{precioInventario}">
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Categoria</label>
+            <div class="col-sm-2">
+                <select th:field="*{categoria}" class="form-control" id="categoria">
+                    <option value="">--seleccionar--</option>
+                    <option th:each="categoria:${categoria}"
+
+                            th:value="${categoria.id_categoria}"
+                            th:text="${categoria.nombre}"
+                    >
+
+                </select>
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+
+
+            <label class="col-sm-2 col-form-label">Porcentaje Beneficio</label>
+            <div class="col-sm-1">
+                <input type="text" name="beneficioProducto" th:field="*{beneficioProducto}" id="beneficioProducto"
+                       class="form-control">
+            </div>
+        </div>
+
+		<div class="form-group row">
+
+
+			<label class="col-sm-2 col-form-label">Cantidad</label>
+			<div class="col-sm-1">
+				<input type="text" name="productoDisponibilidad" th:field="*{productoDisponibilidad.stockProducto}" id="productoDisponibilidad"
+					   class="form-control">
+			</div>
+		</div>
+
+
+        <input type="hidden" th:field="*{idProducto}">
+
+        <div class="form-group row">
+
+            <div class="col-sm-6">
+                <input type="submit" value="Guardar" class="btn btn-primary">
+            </div>
+
+
+        </div>
+
+
+    </form>
+</div>
+
+<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>
