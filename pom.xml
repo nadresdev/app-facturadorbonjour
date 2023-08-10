@@ -8,8 +8,8 @@
 		<version>3.0.9</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.bonjourpapeleria.facturadorinventarioBonjour</groupId>
-	<artifactId>facturadorinventarioBonjour</artifactId>
+	<groupId>app-facturadorbonjour</groupId>
+	<artifactId>app-facturadorbonjonjour</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>facturadorinventario</name>
 	<description>SOFTWARE DE GESTION PARA PUNTOS DE VENTA</description>
