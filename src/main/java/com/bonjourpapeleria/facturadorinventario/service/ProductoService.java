@@ -55,7 +55,7 @@ public class ProductoService {
 	}
 
 	public List<Producto> getProductosXnombre(String coincidencia) {
-		List<Producto> recientes = new ArrayList<>();
+		List<Producto> recientes = new ArrayList<Producto>();
 
 		try {
 			Query query1 = em.createQuery("from Producto p where p.nombre like '" + coincidencia + "'");
@@ -88,7 +88,7 @@ public class ProductoService {
 
 
 	public List<Producto> getProductosPorCategoria(Long idCategoria) {
-		List<Producto> recientes = new ArrayList<>();
+		List<Producto> recientes = new ArrayList<Producto>();
 
 		try {
 			Query query1 = em.createQuery("from Producto JOIN Categoria  where id_categoria = " + idCategoria + "Order By idProducto desc");
