@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="layout/layout :: head"></head>
+
+  <body>
+    <header th:replace="layout/layout :: header"></header>
+
+<div class="container-md py-5">
+
+<div class="col-sm-6 py-2"><a th:href="@{formproducto}" class="btn btn-primary">Agregar
+			Producto</a></div>
+    <div class="input-group py-3">
+      <span class="input-group-text" id="buscaProductoListab">
+        <svg 
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          fill="currentColor"
+          class="bi bi-search"
+          viewBox="0 0 16 16"
+        >
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"
+          ></path>
+        </svg>
+      </span>
+      <input
+        type="text"
+        class="form-control"
+        placeholder="¿Qué producto buscas?"
+        aria-label="Input group example"
+        aria-describedby="basic-addon1"
+        id="buscaProductoLista"
+        value=""
+      />
+      
+      </div>
+      <table th:replace="productos/plantilla-lineasproducto :: lineasProducto"></table>
+    <table class="table table-bordered table-striped"  id="cargarListaProductos">
+			<thead class="thead-dark">
+				<tr class="tr-dark">
+					<th hidden="true" id="fila1" >Id</th>
+					<th  width="20%">Nombre</th>
+					<th  width="10%">Marca</th>
+					<th  width="10%">Presentación</th>
+					<th  width="15%" style="background:#EDBB99;" >Precio Venta </th>
+			        <th hidden="true" width="15%" id="col_precioInventario"  class="col">Precio Inventario</th>
+						<th width="5%" id="col_procentajebenficio" class="col" >Porcentaje Beneficio</th>
+					<th  width="10%">Categoria</th> 
+					<th width="5%" >Stock</th>
+					<th  width="5%">Editar</th>
+					<th  width="5%">Eliminar</th>
+					
+
+					<th hidden="true">Id_categoria</th>
+				</tr>
+			</thead>
+				<tbody>
+						</tbody>
+					</table>
+
+			
+			<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles de producto</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <ul >
+        
+ <li>Nombre:  <div id="nombrep" value="i"> </div></li>
+<li>Precio Inventario:  <div id="price" value="i"> </div></li>
+ <li>Porcentaje Beneficio:  <div id="porcentaje" value="i"> </div></li>
+ <li>Cantidad en existencia:  <div id="stock" value="i"> </div></li>
+ 
+
+</ul>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      
+      </div>
+    </div>
+  </div>
+</div>
+    
+    </div><!-- container end -->
+   
+   
+
+   
+    <footer th:replace="layout/layout :: footer"></footer>
+	<script th:replace="productos/js/autocomplete-listaproductos :: javascriptlistaproductos"></script>
+  </body>
+</html>

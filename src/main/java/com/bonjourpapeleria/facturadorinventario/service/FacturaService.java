@@ -1,5 +1,6 @@
 package com.bonjourpapeleria.facturadorinventario.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,13 +13,20 @@ import org.springframework.stereotype.Service;
 
 import com.bonjourpapeleria.facturadorinventario.entity.Categoria;
 import com.bonjourpapeleria.facturadorinventario.entity.Factura;
+import com.bonjourpapeleria.facturadorinventario.entity.LineaFactura;
 import com.bonjourpapeleria.facturadorinventario.entity.Producto;
 import com.bonjourpapeleria.facturadorinventario.repository.ICategoriaRepository;
 import com.bonjourpapeleria.facturadorinventario.repository.IFacturaRepository;
 import com.bonjourpapeleria.facturadorinventario.repository.IProductoRepository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+
 @Service
 public class FacturaService {
+	
+	@Autowired
+	private EntityManager em;
 	
 	@Autowired
 	private IFacturaRepository facturaRepository;
@@ -56,5 +64,27 @@ public Page<Factura> getFacturasRecientes(Pageable pageN) {
 
 	return facturaRepository.findAll(pageN);
 }
+
+public void borrarFacturaXId(Long id) {
+	
+	facturaRepository.deleteById(id);
+	
+}
+
+public List<Factura> ListaProductosXiDFactura(Long idFactura) {
+	List<Factura> detallesFactura = new ArrayList<Factura>();
+
+	try {
+		Query query1 = em.createQuery("from Factura f inner join LineaFactura l  where f.idFactura =" + idFactura );
+		detallesFactura = query1.getResultList();
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+
+	return detallesFactura;
+}
+
 
 }

@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+	<table class="d-none" th:fragment="lineasProducto">
+
+		<tbody id="plantillaLineasProducto">
+
+			<tr id="row_{ID}">
+				<td class="d-none"><input type="hidden"  value="{ID}"
+					name="linea_id[]"></td>
+				<td>{NOMBRE} <img th:src="@{/images/list-task.svg}" width="15%" value="{PRECIO_INVENTARIO}"  height="20%" id="desplegar_derecha" 
+				onclick="mostrarprecioInventario({ID})"/></td>
+			    <td>{MARCA}</td> 
+				<td>{PRESENTACION}</td>  
+				<td>{PRECIO_VENTA}</td>
+				<td  hidden="true" id= "col_precioInventario_l">{PRECIO_INVENTARIO}</td>
+				<td >{PORCENTAJE_BENEFICIO}</td>
+				<td>{CATEGORIA}</td>
+			    <td>{STOCK}</td>
+			    <td><a th:href="@{formproducto/{ID}}"
+						th:text="Editar" class="btn btn-xs btn-primary" ></a></td>
+					<td><a th:href="@{eliminar/{ID}}"
+						   th:text="Eliminar" class="btn btn-xs btn-danger"  
+
+
+						   th:onclick="return confirm('¿Realmente quisiera eliminar éste producto?')" ></a></td>
+
+			    
+				
+
+				
+					
+				
+
+
+			</tr>
+				
+
+		</tbody>
+	
+	</table>
+	
+</body>
+
+</html>

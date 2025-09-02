@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"   xml:lang="es" href="xyz">
+<head th:replace="layout/layout :: head">
+
+<title th:txt="{titulo}"></title>
+</head>
+<header th:replace="layout/layout :: header"></header>
+<body onload="desplegarToggle()" >
+
+
+<div class="scroll-container">
+
+	
+	<div class="container py-4">
+	<div th:replace="layout/layout :: crearcategorialayout" ></div>
+	</div>
+	
+
+	<div class="container-md" id="containerTabla">
+	
+	
+<table class="table table-bordered table-striped py-2" id="tableCategorias"  >
+			<thead class="thead-dark">
+				<tr class="tr-dark">
+					<th hidden="true">Id_categoria</th>
+					<th>Nombre</th>
+					<th>Codigo Categoría</th>
+					<th>Porcentaje Beneficio</th>
+					<th class="editarBtn">Editar</th>
+					<th>Eliminar</th>
+					
+
+					
+				</tr>
+			</thead>
+			<tbody id="tbodyCategorias" > 
+
+				<tr th:each="categoria : ${listacategorias}" >
+
+					<td hidden="true" th:text=${categoria.id_categoria} id="fila1"></td>
+					<td th:text=${categoria.nombre}></td>
+					<td th:text=${categoria.codCategoria}></td>
+					<td th:text=${categoria.procentajeBeneficio}></td>
+					<td><a th:href="@{formcategoriaeditar/} + ${categoria.id_categoria}" 
+						th:text="Editar" class="btn btn-primary btn-xs" aria-disabled=""></a></td>
+					<td><a th:href="@{eliminarcategoria/}+${categoria.id_categoria}"
+						   th:text="Eliminar" class="btn btn-xs btn-danger" 
+
+
+						   th:onclick="return confirm('¿Realmente quisiera eliminar ésta categoría?')" ></a></td>
+
+
+
+					<td th:text="${categoria.id_categoria}" hidden="true"></td>
+					
+
+
+				</tr>
+			</tbody>
+		</table>
+			</div>
+	
+
+	
+	<div th:text="${categoria.id_categoria}" th:value="${categoria.id_categoria}" id="traeIdCategoria" hidden="true"></div>
+	
+	
+
+	</div>
+	<script type="text/javascript">
+	function desplegarToggle(){
+		let id_cat = document.getElementById("traeIdCategoria"); 
+		let text = id_cat.getAttribute("value"); 
+		
+		function desactivarCampos() {
+			  // obtenes todos los campos que tengan la clase texto
+			  let campos = document.getElementsByClassName('btn btn-primary btn-xs')
+			  let camposEliminar = document.getElementsByClassName('btn btn-xs btn-danger')
+			 
+			  // si imprimis campos te muestra que tenes un objeto de key value.
+			  // console.log(campos)
+			  // recorres tu objeto y le agregas disabled.
+			  for (const [key, value] of Object.entries(campos)) {
+			   
+			    value.setAttribute('class', 'btn btn-primary btn-xs disabled')
+			    
+			  }
+			  
+			  for (const [key, value] of Object.entries(camposEliminar)) {
+				   
+				    value.setAttribute('class', 'btn btn-xs btn-danger disabled')
+				    
+				  }
+			}
+		 
+	
+		
+		
+		if (text){ 
+			
+			$('#collapseWidthExample').toggle("swing");
+			desactivarCampos();
+		}
+		
+		
+				
+		
+	}
+			
+			
+		
+	
+	
+	</script>
+	
+		<nav th:replace="paginator-nav :: paginator"></nav>
+<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+	<script type="text/javascript" th:fragment="javascriptlistaproductos">
+
+	
+$(document).ready(function () {
+	$("#buscaProductoLista").autocomplete({
+
+		source: function (request, response) {
+			$.ajax({
+
+				url: "/bonjour/formularios/cargarproductosListaBuscar/" + request.term, 
+				dataType: "json",
+				data: { term: request.term }, 
+				
+				success: function (data) {
+				
+					
+				$("#cargarListaProductos tbody").empty();
+			let producto;
+			var lineaProducto;
+					console.log(data);
+					
+					response($.map(data, function (item) {
+						
+					
+							
+						
+							producto={
+							value: item.idProducto,
+							label: item.nombre,
+							marca:item.marca,
+							presentacion: item.presentacion,
+							precioInventario: item.precioInventario,
+						    precioventa: item.precioBeneficio,
+						    categoria: item.categoria.nombre,
+						    stock: item.productoDisponibilidad.stockProducto,
+						    porcentaje: item.beneficioProducto}
+						
+							 lineaProducto = $("#plantillaLineasProducto").html();
+							
+							lineaProducto = lineaProducto.replace(/{ID}/g,producto.value);
+							lineaProducto = lineaProducto.replace(/{NOMBRE}/g,producto.label);
+							lineaProducto = lineaProducto.replace(/{MARCA}/g,producto.marca);
+							lineaProducto = lineaProducto.replace(/{PRESENTACION}/g,producto.presentacion);
+							lineaProducto = lineaProducto.replace(/{PRECIO_INVENTARIO}/g,producto.precioInventario);
+							lineaProducto = lineaProducto.replace(/{PRECIO_VENTA}/g,producto.precioventa);
+							lineaProducto = lineaProducto.replace(/{PORCENTAJE_BENEFICIO}/g,producto.porcentaje);
+							lineaProducto = lineaProducto.replace(/{CATEGORIA}/g,producto.categoria);
+							lineaProducto = lineaProducto.replace(/{STOCK}/g,producto.stock);
+							
+							$("#cargarListaProductos tbody").append(lineaProducto);
+							lineasHelper.asignarcolor(producto.value,producto.stock);  
+						
+							
+								
+					
+						
+						
+					}  
+					
+					));
+					
+					
+				},
+			});
+
+		},
+
+		select: function (event, ui) {
+
+		//	$("#buscar_producto").val(ui.item.label);
+		if(lineasHelper.hasProducto(ui.item.value)){
+						lineasHelper.incrementaCantidad(ui.item.value, ui.item.precio);
+						return false;
+					}
+	
+		
+		var lineaProducto = $("#plantillaLineasProducto").html();
+		lineaProducto = lineaProducto.replace(/{ID}/g,ui.item.producto.value);
+		lineaProducto = lineaProducto.replace(/{NOMBRE}/g,ui.item.producto.label);
+		lineaProducto = lineaProducto.replace(/{MARCA}/g,ui.item.marca);
+		lineaProducto = lineaProducto.replace(/{PRESENTACION}/g,ui.item.presentacion);
+		lineaProducto = lineaProducto.replace(/{PRECIO_INVENTARIO}/g,ui.item.precioInventario);
+		lineaProducto = lineaProducto.replace(/{PRECIO_VENTA}/g,ui.item.precioventa);
+		lineaProducto = lineaProducto.replace(/{PORCENTAJE_BENEFICIO}/g,ui.item.porcentaje);
+		lineaProducto = lineaProducto.replace(/{CATEGORIA}/g,ui.item.categoria);
+		lineaProducto = lineaProducto.replace(/{STOCK}/g,ui.item.stock);
+		
+		$("#cargarListaProductos tbody").append(lineaProducto);
+		
+		return false;
+		}
+	});
+	$("facturar").submit(function(){
+				$("#plantillaLineasFactura").remove();
+				return;
+			});
+});
+
+var lineasHelper = {
+		
+
+
+calcularImporte : function(id, precio, cantidad){
+
+$("#total_importe_" + id).html(parseInt(precio) *  parseInt(cantidad));
+
+this.calcularGranTotal();
+
+},
+
+mostrarAlertaEstado : function(estado,tipoalerta){
+	var alerta = document.getElementById("tipo_factura");
+	alerta.className = tipoalerta; // "alert alert-warning";
+	alerta.textContent = estado;
+	setTimeout(function () {
+	      $("#alerta_borrador");
+	    }, 3000);
+},
+crearBorrador : function(){
+	var estadoFactura;
+
+	if(document.getElementById("flexSwitchCheckDefault").checked==true){
+		estadoFactura = "BORRADOR";
+		
+		this.mostrarAlertaEstado("BORRADOR","alert alert-warning");
+		
+	}else{
+		estadoFactura = "RECAUDO";
+		this.mostrarAlertaEstado("FACTURA DE VENTA","alert alert-info");
+	};
+	
+		$('input[name="linea_id[]"]').each(function(){
+			
+				$("#estado_" + parseInt($(this).val()) ).html(estadoFactura);
+			
+		});
+
+		
+
+	
+},
+hasProducto: function(id){
+
+					var resultado = false;
+
+					$('input[name="linea_id[]"]').each(function(){
+						if(parseInt(id) == parseInt($(this).val()) ){
+							resultado = true;
+						}
+					});
+
+					return resultado;
+				},
+				incrementaCantidad: function(id, precio){
+					var cantidad = $("#cantidad_" + id).val() ? parseInt($("#cantidad_" + id).val()) : 0;
+					$("#cantidad_" + id).val(++cantidad);
+					this.calcularImporte(id, precio, cantidad);
+				},
+				eliminarLineaFactura: function(id){
+					$("#row_" + id).remove();
+					this.calcularGranTotal();
+				},
+				calcularGranTotal: function(){
+					var total = 0;
+
+					$('span[id^="total_importe_"]').each(function(){
+						total += parseInt($(this).html());
+					});
+
+					$('#gran_total').html(total);
+				
+				},
+				asignarcolor: function(id,STOCK){
+					let color ;
+					
+					 if(STOCK <=5){
+					    	
+						 color = 'background-color:#E74C3C;';
+					 }else if(STOCK >5 && STOCK <=8){
+					    	
+				    	 color = 'background-color:#FDA14B;';
+				    
+					    }else if(STOCK >8 && STOCK <12){
+					    	
+					    	 color = 'background-color:#F3FF65;'
+					    }else if(STOCK >=12){
+					    	
+					    	 color ='background-color:#87FF81;';
+					    }
+					  
+					$("#row_" + id).attr('style', color);
+					
+				}
+				
+		}
+		
+		
+
+$("#buscaProductoLista").on("keyup", function() {        
+	if($("#buscaProductoLista").attr("value")==''){
+		$("#cargarListaProductos tbody").empty();
+        
+		}          
+	
+});
+
+/*,{PRECIO_INVENTARIO},{PORCENTAJE_BENEFICIO},{STOCK}    ,PRECIO_INVENTARIO,PORCENTAJE_BENEFICIO,STOCK*/
+ 
+ function mostrarprecioInventario(ID){
+	
+let id_p = ID;
+	    $.ajax({
+	        type: 'GET',
+	    	url: "/bonjour/formularios/getProductoXID/" + id_p, 
+	        data: {
+	            idProducto : id_p
+	            },
+	            dataType : 'json',
+	        success: function(data){
+	        	console.log(data);
+	        	$.map(data, function (item) {
+					
+	        		producto={
+							value: item.idProducto,
+							label: item.nombre,
+							marca:item.marca,
+							presentacion: item.presentacion,
+							precioInventario: item.precioInventario,
+						    precioventa: item.precioBeneficio,
+						    categoria: item.categoria.nombre,
+						    stock: item.productoDisponibilidad.stockProducto,
+						    porcentaje: item.beneficioProducto}
+	        		
+	        		 $("#nombrep").html(producto.label);
+					 $("#price").html(producto.precioInventario);
+					 $("#porcentaje").html(producto.porcentaje);
+					 $("#stock").html(producto.stock);
+					
+					 $("#exampleModal").modal('show');
+					    
+				
+	        		
+					
+				});
+	        	
+	        	
+	        	
+	        	/*console.log(data);
+	        	console.log("beneficio: " + parseInt(data[1]));
+	        	addData(mes,parseInt(data[1]),parseInt(data[2]));*/
+	        }
+	    });
+	    
+			
+			
+	
+	
+	 
+	
+ }
+ ;
+ 
+ function getDetallesFactura(ID){
+		
+	 
+	 	    $.ajax({
+	 	        type: 'GET',
+	 	    	url: "/bonjour/factura/getDetallesFactura/" + ID, 
+	 	        data: {
+	 	            idFactura: ID
+	 	            },
+	 	            dataType : 'json',
+	 	        success: function(data){
+	 	        	//console.log(data);
+	 	      
+	 	        	$("#cargarListaDetalles tbody").empty();
+	 	        	data.forEach(function(item) {
+	 	        			 
+	 	        		
+	 	        				  
+	 	        			console.log(item.Nombre);
+	 	        			var lineaProductoDetalle = $("#plantillaLineasFacturaDetalle").html();
+								
+	 	        			lineaProductoDetalle = lineaProductoDetalle.replace(/{ID}/g,item.id);
+	 	        			lineaProductoDetalle = lineaProductoDetalle.replace(/{NOMBRE}/g,item.Nombre);
+	 	        			lineaProductoDetalle = lineaProductoDetalle.replace(/{CANTIDAD}/g,item.Cantidad);
+	 	        			lineaProductoDetalle = lineaProductoDetalle.replace(/{VALOR_IMPORTE}/g,item.Valor_importe);
+                            $("#cargarListaDetalles tbody").append(lineaProductoDetalle);
+								
+                            $("#totFactura").html(item.Valor_factura);
+								
+	 	        			}); 
+	 	        	
+	 	        	
+	 	        	
+	 	        	 $("#LineaFacturaDetalleModal").modal('show');
+	 	        	 
+	 	     
+	 	        	
+	 	        }
+	 	    });
+	 	    
+	 			
+	 			
+	 	
+	 	
+	 	 
+	 	
+	  }
+
+ 
+</script>
+</body>
+</html>

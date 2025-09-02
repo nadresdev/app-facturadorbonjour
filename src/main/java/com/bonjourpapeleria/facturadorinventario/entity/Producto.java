@@ -19,7 +19,7 @@ public class Producto implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_producto", unique = true)
@@ -48,7 +48,7 @@ public class Producto implements Serializable {
 	private List<LineaFactura> lineaFactura;
   @JsonIgnore
 	@ManyToOne
-	@JoinColumn(name = "id_categoria",referencedColumnName = "id_categoria")
+	@JoinColumn(name = "id_categoria", referencedColumnName = "id_categoria")
     private Categoria categoriaproductos;
 
 
@@ -76,11 +76,11 @@ public class Producto implements Serializable {
     
 	public Long precioBeneficio() {
 		
-		Long precioFinal = precioInventario +((precioInventario * this.beneficioProducto)/100);
+		/*Long precioFinal = precioInventario +((precioInventario * this.beneficioProducto)/100);
 		precioFinal = precioFinal/100;
 		precioFinal = precioFinal*100;
-	    this.setPrecioBeneficio(Long.valueOf(precioFinal));
-		return precioFinal;
+	    this.setPrecioBeneficio(Long.valueOf(precioFinal));*/
+		return precioBeneficio;
 	}
 	
 	

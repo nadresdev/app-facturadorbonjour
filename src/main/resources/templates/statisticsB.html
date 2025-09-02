@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="layout/layout :: head">   <title>t</title> </head>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js" ></script>
+ <header th:replace="layout/layout :: header"></header>
+<body  onload="getCurrentDate()">
+<div class="container">
+ <div class="container">
+      <h1 th:text="${titulo}"></h1>
+
+      <form action="" method="POST" class="form-row mb-4">
+        <div class="col-4">
+          <label for="mes_rango">Mes</label>
+          <input
+            type="month"
+            
+            name="fecha"
+            id="mes_rango"
+            class="form-control"
+            
+            onchange="getDatosMes(this.value)"
+          />
+        </div>
+        
+        
+         
+        
+       <div class="col">
+          <h1 align="right">
+            Profit:<span
+              class="badge badge-pill badge-secondary"
+              id="total_profit"
+              th:field="${total_profit}"
+              style="background: #2c3e50"
+              >0</span
+            >
+          </h1>
+        </div> 
+        
+         <div class="col">
+        <h1 align="right">
+          Balance:<span
+            class="badge badge-pill badge-secondary"
+            id="balance"
+th:value="0"
+           style="background: #2c3e50; " 
+            >0</span
+          >
+        </h1>
+      </div>
+       
+      </form>
+      
+      
+      <div class="row align-items-start">
+        <div class="col">
+          <h3 align="right">
+            Ventas $<span
+              class="badge badge-pill badge-secondary"
+              id="total_ventas"
+              th:field="${total_beneficio}"
+              style="background: #2c3e50"
+              >0</span
+            >
+          </h3>
+        </div>
+
+        
+
+        <div class="col">
+          <h3 align="right">
+            Inventario:<span
+              class="badge badge-pill badge-secondary"
+              id="total_inventario"
+              th:field="${total_inventario}"
+              style="background: #2c3e50"
+              >0</span
+            >
+          </h3>
+        </div>
+
+        <div class="col">
+          <h3 align="right">
+            Egresos:<span
+              class="badge badge-pill badge-secondary"
+              id="total_egresos"
+              style="background: #2c3e50"
+              >0</span
+            >
+          </h3>
+        </div>
+      </div>
+    </div>
+   <div class="col">
+<div style="width:600px;"><canvas id="acquisitions">Estadísticas Periodo</canvas></div><br/>
+</div>
+
+<form action="" method="POST" class="form-row mb-4">
+        <div class="col-4">
+          <label for="mes_rangoXDia">Mes X días</label>
+          <input
+            type="month"
+            
+            name="fecha"
+            id="mes_rangoXDia"
+            class="form-control"
+            
+            onchange="getDatosMesPerDay(this.value)"
+          />
+        </div>
+
+<div class="col">
+<div style="width:600px;"><canvas id="acquisitionsPerDay">Estadísticas X Días</canvas></div><br/>
+</div>
+ 
+ 
+</div>
+<script>
+
+function getCurrentDate(){
+	
+	let mesElement = $("#mes_rango");
+	let mesElementXDia = $("#mes_rangoXDia");
+	let mes = new Date();
+	let formatedDate= formatDate(mes);
+	mesElement.val(formatedDate);
+	mesElementXDia.val(formatedDate);
+	getDatosMes(formatedDate);
+	getDatosMesPerDay(formatedDate);
+	
+    
+}
+
+function formatDate(date = new Date()) {
+	  const year = date.toLocaleString('default', {year: 'numeric'});
+	  const month = date.toLocaleString('default', {
+	    month: '2-digit',
+	  });
+	  const day = date.toLocaleString('default', {day: '2-digit'});
+
+	  return [year, month].join('-');
+	}
+
+
+let data = [0];
+  
+let c = new Chart(
+	    document.getElementById('acquisitions'),
+	    {
+	      type: 'bar',
+	      data: {
+	        labels: data.map(row => row.year),
+	        datasets: [
+	          ingresos={
+	            label: 'Ventas',
+	            backgroundColor: '#AED6F1',
+	            data: data.map(row => row.ingresos),
+	           
+	          },
+	          profit={
+		            label: 'Profit',
+		            backgroundColor: '#00FF99',
+		            data:data.map(row => row.profit),
+		      },
+	          inventario={
+			            label: 'Rubro inventario',
+			            backgroundColor: '#CC33CC',
+			            data:data.map(row => row.inventario),
+			      },
+	         
+			   egreso={
+			            label: 'Egresos',
+			            backgroundColor:'#D35400',
+			            data:data.map(row => row.egreso)
+			      },
+	        ]
+	      }
+	    }
+	  );
+	  
+	  
+
+data=[0];
+var d = new Chart(
+	    document.getElementById('acquisitionsPerDay'),
+	    {
+	      type: 'bar',
+	      data: {
+	        labels: data.map(row => row.year),
+	        datasets: [
+	          ingresos={
+	            label: 'Ventas',
+	            backgroundColor: '#AED6F1',
+	            data: data.map(row => row.ingresos),
+	           
+	          },
+	          profit={
+		            label: 'Profit',
+		            backgroundColor: '#00FF99',
+		            data:data.map(row => row.profit),
+		      },
+	          inventario={
+			            label: 'Rubro inventario',
+			            backgroundColor: '#CC33CC',
+			            data:data.map(row => row.inventario),
+			      },
+	         
+			   egreso={
+			            label: 'Egresos',
+			            backgroundColor:'#D35400',
+			            data:data.map(row => row.egreso)
+			      },
+	        ]
+	      }
+	    }
+	  );
+	
+	  
+	  
+function getDatosMes(mes){
+
+    $.ajax({
+        type: 'GET',
+        url : '/bonjour/estadisticas/getestadisticas/' + mes,
+        data: {
+            term : mes
+            },
+            dataType : 'json',
+        success: function(data){
+        	console.log(data);
+        	$.map(data, function (item) {
+				
+					
+                    
+		addData(mes,parseInt(item.total_beneficio),parseInt(item.total_profit),parseInt(item.total_inventario),parseInt(item.total_egreso));
+						
+				
+			});
+        	
+        	
+        	
+        	/*console.log(data);
+        	console.log("beneficio: " + parseInt(data[1]));
+        	addData(mes,parseInt(data[1]),parseInt(data[2]));*/
+        }
+    });
+}
+
+function getDatosMesPerDay(mes){ 
+
+	
+    $.ajax({
+        type: 'GET',
+        url : '/bonjour/estadisticas/getestadisticasPerDay/' + mes,
+        data: {
+            term : mes
+            },
+            dataType : 'json',
+        success: function(data){
+        	console.log(data);
+        	
+        	let chart = d;
+        	chart.data.labels =[];
+        	chart.data.datasets[3].data=[];
+        	chart.data.datasets[0].data=[];
+        	chart.data.datasets[1].data=[];
+        	chart.data.datasets[2].data=[];
+    		
+        	$.map(data, function (item) {
+				
+        		console.log("Fecha_objetivo: "+item[0]);
+	addDataPerDay(item[6],parseInt(item[1]),parseInt(item[3]),parseInt(item[2]),parseInt(item[5]),chart);
+						
+				
+			});
+        	
+        	
+        	
+        	/*console.log(data);
+        	console.log("beneficio: " + parseInt(data[1]));
+        	addData(mes,parseInt(data[1]),parseInt(data[2]));*/
+        }
+    });
+}
+	  
+function addData(label,beneficios,profit,inventario,egresos) {
+	let chart = c;
+	chart.data.labels.pop();
+	chart.data.datasets[3].data.pop();
+	chart.data.datasets[0].data.pop();
+	chart.data.datasets[1].data.pop();
+	chart.data.datasets[2].data.pop();
+	
+	
+    chart.data.labels.push(label);
+    chart.data.datasets[3].data.push(egresos);
+    chart.data.datasets[0].data.push(beneficios);
+    chart.data.datasets[1].data.push(profit);
+    chart.data.datasets[2].data.push(inventario);
+    
+  
+    
+    $("#total_egresos").html(egresos);
+    $("#total_ventas").html(beneficios);
+    $("#total_profit").html(profit);
+    $("#total_inventario").html(inventario);
+    
+    $("#balance").html(profit - egresos);
+    let id_cat = document.getElementById("balance"); 
+    let balancetot = profit - egresos;
+    if(balancetot <=19999){
+    	
+    	id_cat.setAttribute('style', 'background-color:#E74C3C;');
+    }else if(balance <=50000 && profit - egresos >=20000){
+    	
+    	id_cat.setAttribute('style', 'background-color:#F8C471;')
+    }else if(balancetot <=100000 && profit - egresos >=50000){
+    	
+    	id_cat.setAttribute('style', 'background-color:#F7DC6F;')
+    }
+  else if(balancetot<=200000 && profit - egresos >=100001){
+	
+	id_cat.setAttribute('style', 'background-color:#85C1E9;')
+}
+  else if(balancetot >=200001){
+		
+		id_cat.setAttribute('style', 'background-color:#7DCEA0 ;')
+	}
+   
+    
+    chart.update();
+}
+
+
+function addDataPerDay(label,beneficios,profit,inventario,egresos,grafica) {
+	let chart = grafica;
+	
+	
+	
+	
+    chart.data.labels.push(label);
+    chart.data.datasets[3].data.push(egresos);
+    chart.data.datasets[0].data.push(beneficios);
+    chart.data.datasets[1].data.push(profit);
+    chart.data.datasets[2].data.push(inventario);
+    chart.update();
+}
+
+</script>
+
+   <footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>

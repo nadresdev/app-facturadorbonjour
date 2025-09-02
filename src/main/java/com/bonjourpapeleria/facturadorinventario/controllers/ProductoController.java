@@ -1,9 +1,12 @@
-package com.bonjourpapeleria.facturadorinventario.controllers;
+ package com.bonjourpapeleria.facturadorinventario.controllers;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.bonjourpapeleria.facturadorinventario.entity.ProductoDisponibilidad;
+import com.bonjourpapeleria.facturadorinventario.entity.*;
+import com.bonjourpapeleria.facturadorinventario.service.EstadisticasService;
+import com.bonjourpapeleria.facturadorinventario.service.FacturaDetalleService;
+import com.bonjourpapeleria.facturadorinventario.service.LineaFacturaService;
 import com.bonjourpapeleria.facturadorinventario.service.ProductoDisponibilidadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,10 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.bonjourpapeleria.facturadorinventario.entity.Categoria;
-import com.bonjourpapeleria.facturadorinventario.entity.ProductoDisponibilidad;
-import com.bonjourpapeleria.facturadorinventario.entity.LineaFactura;
-import com.bonjourpapeleria.facturadorinventario.entity.Producto;
 import com.bonjourpapeleria.facturadorinventario.repository.ICategoriaRepository;
 import com.bonjourpapeleria.facturadorinventario.service.CategoriaService;
 import com.bonjourpapeleria.facturadorinventario.service.ProductoService;
@@ -34,6 +33,9 @@ import jakarta.validation.Valid;
 @RequestMapping("/formularios")
 public class ProductoController {
 
+
+    @Autowired
+    EstadisticasService estadisticasService;
     @Autowired
     private ProductoService productoService;
 
@@ -42,6 +44,10 @@ public class ProductoController {
 
     @Autowired
     private ProductoDisponibilidadService productoDisponibilidadService;
+    
+    @Autowired
+    private LineaFacturaService lineaFacturaService;
+    
 
 
     @GetMapping("/formproducto")
@@ -55,6 +61,20 @@ public class ProductoController {
            
         
         return "/formproducto";
+
+    }
+    
+    @GetMapping("/listaproductosbuscar")
+    public String listaproductos(Producto producto, Model model, RedirectAttributes flash, SessionStatus status) {
+
+        model.addAttribute("titulo", "Nuevo producto");
+        model.addAttribute("producto", producto);
+        model.addAttribute("categoria", categoriaService.getCategorias()); 
+
+        
+           
+        
+        return "/productos/listaproductos";
 
     }
 
@@ -134,14 +154,16 @@ public class ProductoController {
 
                               @Valid Producto producto, BindingResult result, Model model, SessionStatus status, RedirectAttributes flash) {
 
-        if( productoService.getProductoXId(idProducto).getProductoDisponibilidad().getStockProducto().equals(0L)){
+    	Long t = lineaFacturaService.ListaLineasProducto(idProducto);
+        if( productoService.getProductoXId(idProducto).getProductoDisponibilidad().getStockProducto().equals(0L)
+        		&& (lineaFacturaService.ListaLineasProducto(idProducto)==0 )){
 
 
                 productoService.borrarProductoXId(idProducto);
                 flash.addFlashAttribute("warning","Producto borrado");
                 
         }else {
-        	flash.addFlashAttribute("error","No es posible eliminar un producto que existe en stock");
+        	flash.addFlashAttribute("error","No es posible eliminar un producto que existe en stock o en factura");
         	
         }
 
@@ -155,8 +177,32 @@ status.setComplete();
     @GetMapping(value = "/cargarproductos/{term}", produces = {"application/json"})
     public @ResponseBody List<Producto> cargarProductosXNombre(@PathVariable String term) {
 
+              return productoService.getProductosXnombre("%" + term + "%");
 
-        return productoService.getProductosXnombre("%" + term + "%");
+
+    }
+    
+
+    @GetMapping(value = "/cargarproductosListaBuscar/{term}", produces = {"application/json"})
+    public @ResponseBody List<Producto> cargarProductosXNombreListaBuscar(@PathVariable String term, 
+    		@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+    	
+    	
+
+              return productoService.getProductosXnombre("%" + term + "%");
+
+
+    }
+    
+    
+    
+    @GetMapping(value="/getProductoXID/{idProducto}", produces = {"application/json"})
+    public @ResponseBody List<Producto> cargarProductosXID(@PathVariable Long idProducto, 
+    		@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+    	
+    	
+
+              return productoService.getProductosXID(idProducto);
 
 
     }

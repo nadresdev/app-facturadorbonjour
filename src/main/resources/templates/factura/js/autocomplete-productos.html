@@ -5,14 +5,15 @@
 
 	<script type="text/javascript" th:fragment="javascript">
 
-	
+	//autocompleta los productos a facturar /facturar
 $(document).ready(function () {
 	$("#buscar_producto").autocomplete({
 
 		source: function (request, response) {
 			$.ajax({
-
-				url: "/formularios/cargarproductos/" + request.term, 
+				type: 'GET',
+				url: "/bonjour/formularios/cargarproductos/" + request.term, 
+				/*[[@{/bonjour/estadisticas/getestadisticas/}]]*/ 
 				dataType: "json",
 				data: { term: request.term }, 
 				

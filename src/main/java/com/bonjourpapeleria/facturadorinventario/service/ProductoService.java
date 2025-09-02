@@ -37,10 +37,16 @@ public class ProductoService {
 	@Autowired
 	private EntityManager em;
 
+	
 
 	public Producto guardar(Producto producto) {
 
 		return productoRepository.save(producto);
+	}
+	
+	public List<Optional>  ListaProductosXiDFactura(Long idFactura) {
+		
+		return productoRepository.ListaProductosXiDFactura(idFactura);
 	}
 
 	public Page<Producto> Listar(Producto producto) {
@@ -48,10 +54,11 @@ public class ProductoService {
 		return productoRepository.findAll(page);
 	}
 
+	
 	public Producto getProductoXId(Long id) {
 
 
-		return productoRepository.getOne(id);
+		return productoRepository.getById(id);
 	}
 
 	public List<Producto> getProductosXnombre(String coincidencia) {
@@ -67,6 +74,22 @@ public class ProductoService {
 
 
 		return recientes;
+	}
+	
+	
+	public List<Producto> getProductosXID(Long id) {
+		List<Producto> producto = new ArrayList<Producto>();
+
+		try {
+			Query query1 = em.createQuery("from Producto p where p.idProducto = '" + id + "'");
+			producto = query1.getResultList();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		return producto;
 	}
 
 
@@ -108,6 +131,26 @@ public class ProductoService {
 		productoRepository.deleteById(id);
 
 
+	}
+	
+	public List<Optional> getProductosXiDFactura(Long idFactura) {
+		List<Optional> productosFactura = new ArrayList<Optional>();
+
+		try {
+			Query query1 = em.createQuery("select p.nombre, df.cantidad,df.valorImporte, f.total_factura  from Factura f \r\n"
+					+ " inner join LineaFactura df on df.id_factura = f.idFactura\r\n"
+					+ " inner join Producto p on p.idProducto = df.id_producto\r\n"
+					
+					+ " where  f.idFactura =" + idFactura);
+			
+			productosFactura = query1.getResultList();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+		return productosFactura;
 	}
 
 }

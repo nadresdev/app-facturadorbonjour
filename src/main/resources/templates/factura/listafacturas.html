@@ -12,69 +12,139 @@
 
 
 	<div class="container py-4">
-	<div class="card bg-light">
-			<div class="card-header">
-			<h4 th:text="${titulo}"></h4></div>
+	
+			
+				<h4 th:text="${titulo}"></h4>
+			
 			<div class="card-body">
 
-		<div class="col-sm-6 py-2"><a th:href="@{facturar}" class="btn btn-primary">Nueva
-			Factura</a></div>
+
+
+				<div class="col-sm-6 py-2">
+					<a th:href="@{facturar}" class="btn btn-primary">Nueva Factura</a>
+				</div>
 				<div>
-		<table class="table table-bordered table-striped-sm">
+					<table class="table table-bordered table-striped-sm">
+						<thead class="thead-dark">
+							<tr class="tr-dark">
+								<th hidden="true">Id</th>
+
+								<th width="10%">Consecutivo</th>
+								<th width="10%">Detalles</th>
+								<th width="15%">Fecha Elaboracion</th>
+								<th width="10%">Estado</th>
+								<th width="25%">Observacion</th>
+								<th width="10%">Total Factura</th>
+								<th width="5%">Eliminar</th>
+
+
+
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr th:each="factura : ${facturasRecientes}"
+								th:style="|${factura.estado!='RECAUDADO' ? 'background-color:LightSalmon;' : 'background-color:#82E0AA ;'}|">
+
+								<td hidden="true" th:text=${factura.idFactura} id="fila1"></td>
+								<td th:text=${factura.consecutivo} ></td>
+								<td><img th:src="@{/images/list-task.svg}" width="15%" height="20%" 
+								th:id = "${factura.idFactura}" onclick="getDetallesFactura(this.id)"/></td>
+								<td th:text=${factura.fecha_elaboracion}></td>
+								<td th:text=${factura.estado}></td>
+								<td th:text=${factura.observacion}></td>
+								<td th:text="${'$'+ factura.totalFactura}" bgcolor="grey"></td>
+								<td><a th:href="@{eliminar/}+${factura.idFactura}"
+									th:text="Eliminar" class="btn btn-xs btn-danger"
+									th:onclick="return confirm('¿Realmente quisiera eliminar ésta factura?')"></a></td>
+
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<nav th:replace="paginator-nav :: paginator"></nav>
+
+				<button type="button" class="btn btn-primary" data-toggle="modal"
+					data-target=".bd-example-modal-lg">Large modal</button>
+
+				<div class="modal fade bd-example-modal-lg" tabindex="-1"
+					role="dialog" aria-labelledby="myLargeModalLabel"
+					aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">...</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	
+			<!-- Modal -->
+<div class="modal fade" id="LineaFacturaDetalleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Detalles Factura</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+    <!-- </div> <div class="modal-body">
+       <table th:replace="factura/plantillaLineasFacturaDetalle :: lineasFacturaDetalle"></table>
+       <table class="table table-bordered table-striped"  id="cargarListaDetalles">
 			<thead class="thead-dark">
 				<tr class="tr-dark">
-					<th hidden="true">Id</th>
-				
-					<th width="10%">Consecutivo</th>
-					<th width="20%">Fecha Elaboracion</th>
-					<th width="10%">Estado</th>
-					<th width="30%">Observacion</th>
-					<th width="10%">Total Factura</th>
-					<th width="5%">Eliminar</th>
-					
-
+					<th hidden="true" id="fila1" >Id</th>
+					<th>Nombre</th>
+					<th>Cantidad</th> 
+					<th>Valor Importe</th>
 					
 				</tr>
 			</thead>
-			<tbody > 
+				<tbody>
+				
+						</tbody>
+					</table>
+      <div>Total:<h2 id="totFactura" title="i"></h2></div> 
+       
+      </div> -->
+	  
+	  <div class="modal-body">
 
-				<tr th:each="factura : ${facturasRecientes}" th:style="|${factura.estado!='RECAUDADO' ? 'background-color:LightSalmon;' : 'background-color:#82E0AA ;'}|" >
+	      <!-- Plantilla oculta para renderizar filas -->
+	      <script type="text/template" id="plantillaLineasFacturaDetalle">
+	          <tr>
+	              <td hidden>{ID}</td>
+	              <td>{NOMBRE}</td>
+	              <td>{CANTIDAD}</td>
+	              <td>{VALOR_IMPORTE}</td>
+	          </tr>
+	      </script>
 
-					<td hidden="true" th:text=${factura.idFactura} id="fila1"></td>
-					<td th:text=${factura.consecutivo}></td>
-					<td th:text=${factura.fecha_elaboracion}></td>
-					
-					<td th:text=${factura.estado}></td>
-					<td th:text=${factura.observacion}></td>
-					<td th:text="${'$'+ factura.totalFactura}" bgcolor="grey"></td>
-					
-					<td><a th:href="@{eliminar/}+${factura.idFactura}"
-						   th:text="Eliminar" class="btn btn-xs btn-danger" 
+	      <!-- Tabla real donde se cargan los detalles -->
+	      <table class="table table-bordered table-striped" id="cargarListaDetalles">
+	          <thead class="thead-dark">
+	              <tr class="tr-dark">
+	                  <th hidden>Id</th>
+	                  <th>Nombre</th>
+	                  <th>Cantidad</th>
+	                  <th>Valor Importe</th>
+	              </tr>
+	          </thead>
+	          <tbody></tbody>
+	      </table>
 
+	      <div>Total: <h2 id="totFactura" title="i"></h2></div>
 
-						   th:onclick="return confirm('¿Realmente quisiera eliminar ésta factura?')" ></a></td>
-
-
-
-					
-					
-
-					<!--onclick="return confirm('¿Realmente quieres eliminar éste producto?')"-->
-
-
-				</tr>
-			</tbody>
-		</table>
-				</div>
-		<nav th:replace="paginator-nav :: paginator"></nav>
-		</div>
-		</div>
-
-	</div>
-	
+	  </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      
+      </div>
+    </div>
+  </div>
+</div>
 	<!--<nav th:replace="paginator-nav :: paginator"></nav>  -->
-	<footer th:replace="layout/layout :: footer"></footer>
 	
+	<script th:replace="productos/js/autocomplete-listaproductos :: javascriptlistaproductos"></script>
+<footer th:replace="layout/layout :: footer"></footer>
 
 </body>
 </html>

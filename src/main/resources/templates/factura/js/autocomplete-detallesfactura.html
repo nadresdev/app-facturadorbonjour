@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<script type="text/javascript" th:fragment="javascriptlistadetallesfactura">
+
+	
+
+	function getDetallesFactura(ID) {
+	    $.ajax({
+	        type: 'GET',
+	        url: /*[[@{/bonjour/factura/getDetallesFactura/}]]*/ "" + ID, 
+	        data: { idFactura: ID },
+	        dataType: 'json',
+
+	        success: function(data) {
+	            console.log("Respuesta recibida:", data);
+
+	            // limpiar tabla
+	            let $tbody = $("#cargarListaDetalles tbody");
+	            $tbody.empty();
+
+	            let plantilla = $("#plantillaLineasFacturaDetalle").html();
+	            let total = 0;
+
+	            data.forEach(function(item) {
+	                console.log("Procesando item:", item);
+
+	                let fila = plantilla
+	                    .replace(/{ID}/g, item.id)
+	                    .replace(/{NOMBRE}/g, item.Nombre)
+	                    .replace(/{CANTIDAD}/g, item.Cantidad)
+	                    .replace(/{VALOR_IMPORTE}/g, item.Valor_importe);
+
+	                $tbody.append(fila);
+
+	                // acumular total
+	                total += parseFloat(item.Valor_importe);
+	            });
+
+	            // mostrar total
+	            $("#totFactura").html(total.toFixed(2));
+
+	            // mostrar modal
+	            $("#LineaFacturaDetalleModal").modal('show');
+	        },
+
+	        error: function(xhr, status, error) {
+	            console.error("Error en AJAX:", status, error);
+	            console.log("Respuesta del servidor:", xhr.responseText);
+	            alert("No se pudieron cargar los detalles de la factura.");
+	        },
+
+	        complete: function() {
+	            console.log("Petición AJAX finalizada.");
+	        }
+	    });
+	}
+
+	
+
+
+ /*
+ function getDetallesFactura(ID){
+		
+	 
+	 	    $.ajax({
+	 	        type: 'GET',
+	 	    	url: "/bonjour/factura/getDetallesFactura/" + ID, 
+	 	        data: {
+	 	            idFactura: ID
+	 	            },
+	 	            dataType : 'json',
+	 	        success: function(data){
+	 	        	//console.log(data);
+	 	      
+	 	        	$("#cargarListaDetalles tbody").empty();
+	 	        	data.forEach(function(item) {
+	 	        			 
+	 	        		
+	 	        				  
+	 	        			console.log(item.Nombre);
+							
+							var lineaProductoDetalle = `
+							    <tr>
+							        <td>${item.id}</td>
+							        <td>${item.Nombre}</td>
+							        <td>${item.Cantidad}</td>
+							        <td>${item.Valor_importe}</td>
+							    </tr>`;
+							$("#cargarListaDetalles tbody").append(lineaProductoDetalle);
+							
+							//comentar hasta 48
+	 	        			var lineaProductoDetalle = $("#plantillaLineasFacturaDetalle").html();
+								
+	 	        			lineaProductoDetalle = lineaProductoDetalle.replace(/{ID}/g,item.id);
+	 	        			lineaProductoDetalle = lineaProductoDetalle.replace(/{NOMBRE}/g,item.Nombre);
+	 	        			lineaProductoDetalle = lineaProductoDetalle.replace(/{CANTIDAD}/g,item.Cantidad);
+	 	        			lineaProductoDetalle = lineaProductoDetalle.replace(/{VALOR_IMPORTE}/g,item.Valor_importe);
+                            $("#cargarListaDetalles tbody").append(lineaProductoDetalle);
+							//
+								
+                            $("#totFactura").html(item.Valor_factura);
+								
+	 	        			}); 
+	 	        	
+	 	        	
+	 	        	
+	 	        	 $("#LineaFacturaDetalleModal").modal('show');
+	 	        	 
+	 	     
+	 	        	
+	 	        }
+	 	    });
+	 	    
+	 			
+	 			
+	 	
+	 	
+	 	 
+	 	
+	  }
+*/
+
+</script>
+</body>
+</html>

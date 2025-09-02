@@ -143,13 +143,7 @@ public class Factura  implements Serializable {
 		this.observacion = observacion;
 	}
 
-	public List<LineaFactura> getLf() {
-		return lineasFactura;
-	}
 
-	public void setLf(List<LineaFactura> lf) {
-		this.lineasFactura = lf;
-	}
 
 	public FacturaDetalle getFacturaDetalle() {
 		return facturaDetalle;

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/layout :: head"></head>
+<body onload="desplegarToggle()" >
+<header th:replace="layout/layout :: header"></header>
+<div class="container">
+
+	<div>
+
+
+<div th:replace="layout/layout :: crearmovimientoyout"></div>
+
+<table class="table table-bordered table-striped py-2" id="tableMovimientos"  >
+			<thead class="thead-dark">
+				<tr class="tr-dark">
+					<th hidden="true">Id_movimiento</th>
+					<th>Fecha Elaboración</th>
+					<th>Tipo</th>
+					<th>Observación</th>
+					<th>Valor</th>
+					<th class="editarBtn">Editar</th>
+					<th>Eliminar</th>
+					
+
+					
+				</tr>
+			</thead>
+			<tbody id="tbodyMovimientos" > 
+
+				<tr th:each="movimiento : ${movimientosrecientes}" th:style="|${movimiento.signo == '-' ? 'background-color:#F9E79F;' : 'background-color:#76D7C4;'}|" >
+
+					<td hidden="true" th:text=${movimiento.id} id="fila1"></td>
+					<td th:text=${movimiento.fechaElaboracion}></td>
+					<td th:text=${movimiento.tipo}></td>
+					<td th:text=${movimiento.observacion}></td>
+					<td th:text="${movimiento.signo} +${movimiento.valor}"></td>
+					<td><a th:href="@{frmmovimientoditar/} + ${movimiento.id}" 
+						th:text="Editar" class="btn btn-primary btn-xs" aria-disabled=""></a></td>
+					<td><a th:href="@{eliminarmovimiento/}+${movimiento.id}"
+						   th:text="Eliminar" class="btn btn-xs btn-danger" 
+
+
+						   th:onclick="return confirm('¿Realmente quisiera eliminar éste movimiento?')" ></a></td>
+
+
+
+					<td th:text="${movimientos.id}" hidden="true"></td>
+					
+
+					<!--onclick="return confirm('¿Realmente quieres eliminar éste producto?')"-->
+
+
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<input type="hidden" th:text="${movimientos.id}" th:value="${movimientos.id}" id="traeIdmovimiento" hidden="true">
+	
+	
+	<nav th:replace="paginator-nav :: paginator"></nav>
+	</div>
+	<script type="text/javascript">
+	
+	
+	
+	const selectElementd = document.getElementById("tipomovimiento");
+
+	
+	selectElementd.addEventListener("change", (event) => {
+	  const elem2 = document.getElementById("tipomovimiento").value;
+	  
+	  let arr = elem2.split(' ');
+	  
+	  let signo = arr[0];
+	  
+	  $("#contienesigno").val(signo);
+		  
+	  
+	});
+	
+/*	let selectElementFecha = document.getElementById("fechaElaboracion");
+	selectElementFecha.addEventListener("change", (event) => {
+		  const elem2 = document.getElementById("fechaElaboracion").value;
+		  
+		 
+		  $("#enviaFechaElaboracion").val(elem2);
+			  
+		
+		  
+		});
+	
+	*/
+
+	
+	
+	function desplegarToggle(){
+		let id_cat = document.getElementById("traeIdmovimiento"); 
+		let text = id_cat.getAttribute("value"); 
+		
+		/*let fechaRecibidor =  document.getElementById("fechaElaboracion");
+		let fechaEdita = document.getElementById("enviaFechaElaboracion"); 
+		let fechaObtenidaEditar = fechaEdita.getAttribute('value'); 
+		
+		if (fechaObtenidaEditar){
+			 
+			fechaRecibidor.setAttribute('value', fechaObtenidaEditar)
+			
+		}*/
+
+		function desactivarCampos() {
+			  // obtenes todos los campos que tengan la clase texto
+			  let campos = document.getElementsByClassName('btn btn-primary btn-xs')
+			  let camposEliminar = document.getElementsByClassName('btn btn-xs btn-danger')
+			 
+			  // si imprimis campos te muestra que tenes un objeto de key value.
+			  // console.log(campos)
+			  // recorres tu objeto y le agregas disabled.
+			  for (const [key, value] of Object.entries(campos)) {
+			   
+			    value.setAttribute('class', 'btn btn-primary btn-xs disabled')
+			    
+			  }
+			  
+			  for (const [key, value] of Object.entries(camposEliminar)) {
+				   
+				    value.setAttribute('class', 'btn btn-xs btn-danger disabled')
+				    
+				  }
+			}
+		 
+	
+		
+		
+		if (text){ 
+			
+			$('#collapseWidthExample').toggle("swing");
+			desactivarCampos();
+		}
+		
+		
+				
+		
+	}
+			
+			
+		
+	
+	
+	</script>
+<footer th:replace="layout/layout :: footer"></footer>
+</body>
+</html>
