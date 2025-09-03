@@ -81,7 +81,7 @@ return;
 
 },
 
-getPorcentajeBeneficio : function(){
+getPorcentajeBeneficio : function(){ //
 	
 	let elementbeneficioProducto = document.getElementById("beneficioProducto");
 	let precioVenta =$("#precioVenta").val();
