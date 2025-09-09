@@ -11,13 +11,15 @@
 				<td class="d-none"><input type="hidden"  value="{ID}"
 					name="linea_id[]"></td>
 				<td>{NOMBRE}</td>
+				<td>{STOCK}</td>
 				<td>{PRESENTACION}</td>
 				<td><span id="estado_{ID}" name="estado[]">RECAUDO</span></td>
 				<td>{PRECIO}</td>
 				<td><input type="number" value="1" name="cantidad[]"
 					id="cantidad_{ID}" class="form-control col-sm-4"
-					onchange="lineasHelper.calcularImporte({ID},{PRECIO},this.value);"/></td>
+					onchange="lineasHelper.calcularImporte({ID},{PRECIO},this.value,{STOCK});"/></td>
 				<td>
+				
 				<span id="total_importe_{ID}">0</span></td>
 				<td><a href="#" class="btn btn-danger btn-sm" onclick="lineasHelper.eliminarLineaFactura({ID});">x</a></td>
     

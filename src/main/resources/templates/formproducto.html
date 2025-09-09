@@ -14,7 +14,7 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Nombre</label>
             <div class="col-sm-6">
-                <input type="text" name="nombre" class="form-control" th:field="*{nombre}">
+                <input type="text" name="nombre" class="form-control" th:field="*{nombre}" required>
 
             </div>
 
@@ -22,7 +22,7 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Marca</label>
             <div class="col-sm-6">
-                <input type="text" name="marca" id="marca" class="form-control" th:field="*{marca}">
+                <input type="text" name="marca" id="marca" class="form-control" th:field="*{marca}" required>
             </div>
 
         </div>
@@ -31,7 +31,7 @@
             <label class="col-sm-2 col-form-label">Presentación</label>
             <div class="col-sm-3">
                 <input type="text" name="presentacion" id="presentacion" class="form-control"
-                       th:field="*{presentacion}">
+                       th:field="*{presentacion}" required>
             </div>
 
         </div>
@@ -41,7 +41,7 @@
             <div class="col-sm-2">
                 <input type="text" name="precioInventario" id="precioInventario" class="form-control"
                  onchange="estadisticasHelper.getPorcentajeBeneficio()"
-                       th:field="*{precioInventario}">
+                       th:field="*{precioInventario}" required>
             </div>
 
         </div>
@@ -51,7 +51,7 @@
             <div class="col-sm-2">
                 <input type="text" name="precioVenta" id="precioVenta" class="form-control"
                 onchange="estadisticasHelper.getPorcentajeBeneficio()"
-                       th:field="*{precioBeneficio}">
+                       th:field="*{precioBeneficio}" required>
             </div>
 
         </div>
@@ -59,7 +59,7 @@
         <div class="form-group row">
             <label class="col-sm-2 col-form-label">Categoria</label>
             <div class="col-sm-2">
-                <select th:field="*{categoria}" class="form-control" id="categoria">
+                <select th:field="*{categoria}" class="form-control" id="categoria" required>
                     <option value="">--seleccionar--</option>
                     <option th:each="categoria:${categoria}"
 
@@ -83,7 +83,7 @@
                     
             <span
               class="bcol-sm-2 col-form-label py-1"
-              id="beneficioProducto_label" th:text="*{beneficioProducto}" 
+              id="beneficioProducto_label" th:text="*{beneficioProducto}" required
             ></span
             >
         

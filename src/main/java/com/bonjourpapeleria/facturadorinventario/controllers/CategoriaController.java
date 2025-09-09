@@ -21,11 +21,8 @@ import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bonjourpapeleria.facturadorinventario.entity.Categoria;
-import com.bonjourpapeleria.facturadorinventario.entity.Producto;
-import com.bonjourpapeleria.facturadorinventario.entity.ProductoDisponibilidad;
 import com.bonjourpapeleria.facturadorinventario.service.CategoriaService;
 import com.bonjourpapeleria.facturadorinventario.service.ProductoDisponibilidadService;
-import com.bonjourpapeleria.facturadorinventario.service.ProductoService;
 import com.bonjourpapeleria.facturadorinventario.util.paginator.PageRender;
 
 import jakarta.validation.Valid;

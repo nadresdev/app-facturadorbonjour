@@ -72,7 +72,7 @@ $(document).ready(function () {
 
 		select: function (event, ui) {
 
-		//	$("#buscar_producto").val(ui.item.label);
+		
 		if(lineasHelper.hasProducto(ui.item.value)){
 						lineasHelper.incrementaCantidad(ui.item.value, ui.item.precio);
 						return false;

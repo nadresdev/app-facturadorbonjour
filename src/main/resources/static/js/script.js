@@ -32,7 +32,7 @@ let term = $("#mes_rango").val();
                     						};
                     					})
 console.log(data.total_beneficio);
-$("#balance").html(data.total_beneficio -  data.total_inventario- data.total_egresos);
+$("#balance").html(data.total_beneficio -  data.total_inventario - data.total_egresos);
 $("#total_ventas").html(tot_bene);
 $("#total_profit").html(data.total_profit);
 $("#total_inventario").html(data.total_inventario);
